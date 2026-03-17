@@ -74,6 +74,22 @@ class PostListController {
         return (this._ctx.parameters.tag || "").split(/\s+/).filter((s) => s);
     }
 
+    get _searchQuery() {
+        let query = (this._ctx.parameters.query || "").trim();
+        const poolIds = (this._ctx.parameters.pool || "")
+            .trim()
+            .replace(/\s+/g, ",");
+
+        if (poolIds) {
+            query = `pool:${poolIds} ${query}`.trim();
+        }
+
+        if (this._ctx.parameters.nsfw === "0") {
+            query = `rating:safe ${query}`.trim();
+        }
+        return query;
+    }
+
     _evtNavigate(e) {
         router.showNoDispatch(
             uri.formatClientLink("posts", e.detail.parameters)
@@ -147,7 +163,7 @@ class PostListController {
             },
             requestPage: (offset, limit) => {
                 return PostList.search(
-                    this._ctx.parameters.query,
+                    this._searchQuery,
                     offset,
                     limit,
                     fields

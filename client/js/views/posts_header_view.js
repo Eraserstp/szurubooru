@@ -257,6 +257,14 @@ class PostsHeaderView extends events.EventTarget {
         return this._hostNode.querySelector("form [name=search-text]");
     }
 
+    get _poolInputNode() {
+        return this._hostNode.querySelector("form [name=pool]");
+    }
+
+    get _nsfwInputNode() {
+        return this._hostNode.querySelector("form [name=nsfw]");
+    }
+
     get _bulkEditTagsNode() {
         return this._hostNode.querySelector(".bulk-edit-tags");
     }
@@ -317,7 +325,10 @@ class PostsHeaderView extends events.EventTarget {
 
     _navigate() {
         this._autoCompleteControl.hide();
-        let parameters = { query: this._queryInputNode.value };
+        let parameters = {
+            query: this._queryInputNode.value,
+            pool: this._poolInputNode.value,
+        };
 
         // convert falsy values to an empty string "" so that we can correctly compare with the current query
         const prevQuery = this._ctx.parameters.query
@@ -339,6 +350,7 @@ class PostsHeaderView extends events.EventTarget {
             this._bulkDeleteEditor && this._bulkDeleteEditor.opened
                 ? "1"
                 : null;
+        parameters.nsfw = this._nsfwInputNode.checked ? null : "0";
         this.dispatchEvent(
             new CustomEvent("navigate", { detail: { parameters: parameters } })
         );

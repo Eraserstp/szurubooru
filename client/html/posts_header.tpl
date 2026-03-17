@@ -1,6 +1,8 @@
 <div class='post-list-header'><%
     %><form class='horizontal search'><%
         %><%= ctx.makeTextInput({text: 'Search query', id: 'search-text', name: 'search-text', value: ctx.parameters.query}) %><%
+        %><%= ctx.makeTextInput({text: 'Pool IDs', name: 'pool', value: ctx.parameters.pool}) %><%
+        %><label class='append'><input type='checkbox' name='nsfw' value='1' <%- ctx.parameters.nsfw === '0' ? '' : 'checked' %>/>NSFW</label><%
         %><wbr/><%
         %><input class='mousetrap' type='submit' value='Search'/><%
         %><wbr/><%
